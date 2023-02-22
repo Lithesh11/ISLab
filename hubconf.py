@@ -4,7 +4,6 @@ from torch.utils.data import DataLoader
 from torchvision import datasets
 from torchvision.transforms import ToTensor
 
-# Get cpu or gpu device for training.
 device = "cuda" if torch.cuda.is_available() else "cpu"
 print(f"Using {device} device")
 
@@ -21,7 +20,7 @@ classes = [
     "Ankle boot",
 ]
 
-# Define model
+
 class NeuralNetwork(nn.Module):
     def __init__(self):
         super(NeuralNetwork, self).__init__()
@@ -39,7 +38,6 @@ class NeuralNetwork(nn.Module):
         logits = self.linear_relu_stack(x)
         return logits
 
-#############################
 
 def get_lossfn_and_optimizer(mymodel):
     loss_fn = nn.CrossEntropyLoss()
@@ -57,7 +55,6 @@ def load_data():
         transform=ToTensor(),
     )
 
-    # Download test data from open datasets.
     test_data = datasets.FashionMNIST(
         root="data",
         train=False,
@@ -67,11 +64,10 @@ def load_data():
     
     return training_data, test_data
 
-#############################
 
 def create_dataloaders(training_data, test_data, batch_size=64):
 
-    # Create data loaders.
+
     train_dataloader = DataLoader(training_data, batch_size=batch_size)
     test_dataloader = DataLoader(test_data, batch_size=batch_size)
 
@@ -82,7 +78,7 @@ def create_dataloaders(training_data, test_data, batch_size=64):
         
     return train_dataloader, test_dataloader
   
-#############################
+
 
 def get_model():
     
@@ -97,11 +93,9 @@ def _train(dataloader, model, loss_fn, optimizer):
     for batch, (X, y) in enumerate(dataloader):
         X, y = X.to(device), y.to(device)
 
-        # Compute prediction error
         pred = model(X)
         loss = loss_fn(pred, y)
 
-        # Backpropagation
         optimizer.zero_grad()
         loss.backward()
         optimizer.step()
